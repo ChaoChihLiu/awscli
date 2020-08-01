@@ -1,0 +1,5 @@
+ //add new tag in ec2 instance, this cmd start instance with tag 'env:UAT'
+ aws ec2 describe-instances --query "Reservations[*].Instances[*].{Instance:InstanceId,Subnet:SubnetId,Name:Tags[?Key=='Name']|[0].Value,Status:State.Name}" --filters Name=tag-value,Values=UAT --output json | jq -r '.[][].Instance' | while read line; do echo  "running aws ec2 start-instances --instance-ids $line"; aws ec2 start-instances --instance-ids $line; done
+
+ //add new tag in ec2 instance, this cmd stop instance with tag 'env:UAT'
+ aws ec2 describe-instances --query "Reservations[*].Instances[*].{Instance:InstanceId,Subnet:SubnetId,Name:Tags[?Key=='Name']|[0].Value,Status:State.Name}" --filters Name=tag-value,Values=UAT --output json | jq -r '.[][].Instance' | while read line; do echo  "running aws ec2 stop-instances --instance-ids $line"; aws ec2 stop-instances --instance-ids $line; done
